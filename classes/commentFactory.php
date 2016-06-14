@@ -5,9 +5,9 @@
  * Дата: 12:17:31 09.06.2016
  */
 class module_comment_classes_commentFactory {
+
     private $_dbTable = 'modulecomment';
     protected $_moduleData = null;
-    
     static $_instance = null;
 
     /**
@@ -21,11 +21,11 @@ class module_comment_classes_commentFactory {
         }
         return self::$_instance;
     }
-    
+
     public function __construct($data) {
         $this->_moduleData = $data;
     }
-    
+
     public function __get($name) {
         switch ($name) {
             case '_entityId':
@@ -40,11 +40,22 @@ class module_comment_classes_commentFactory {
                 break;
         }
     }
-    
+
     public function getAllByEntity($entityId) {
-        $rows = $this->_db->getAll('select * from ' . $this->_dbTable . ' where ' . $this->_dbTable . '_entity_id=?s'
-                , $this->_entityId);
+        $rows = $this->_db->getAll('select * from ' . $this->_dbTable . ' where ' . $this->_dbTable . '_entity_id=?s and ' . $this->_dbTable . '_active=1'
+                , $entityId);
         return $this->getClassList($rows);
+    }
+
+    public function getById($commentId) {
+        $row = $this->_db->getRow('select * from ' . $this->_dbTable . ' where ' . $this->_dbTable . '_id=?i'
+                , (int) $commentId);
+        return $this->getClass($row);
+    }
+
+    public function removeById($commentId) {
+        $this->_db->getRow('update ' . $this->_dbTable . ' set ' . $this->_dbTable . '_active=0 where ' . $this->_dbTable . '_id=?i'
+                , (int) $commentId);
     }
 
     public function getClassList($rows) {
@@ -56,7 +67,8 @@ class module_comment_classes_commentFactory {
     }
 
     public function getClass($row) {
-        $row['userFactory']=$this->_userFactory;
+        $row['userFactory'] = $this->_userFactory;
         return new module_comment_classes_comment($row);
     }
+
 }

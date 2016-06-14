@@ -9,9 +9,10 @@
 <section class="{_SITE_NAME_}-module-<?= $this->_code; ?>" data-moduleId="<?= $this->_entityId ?>">
     <h1>Комментарии</h1>
     <div class="addCommentForm">
-        <form method="POST">
-            <textarea name="modulecomment[comment]"></textarea>
-            <input type="submit"/>
+        <form class="addCommentForm-Form" method="POST">
+            <input type="hidden" value="1" name="modulecomment<?= $this->_entityId ?>[ajax]"/>
+            <textarea name="modulecomment<?= $this->_entityId ?>[comment]"></textarea>
+            <input class="submitComment" type="submit"/>
         </form>
     </div>
     <? include 'comments.php'; ?>

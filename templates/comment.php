@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Автор: Dragon
  * Дата: 23:27:20 08.06.2016
@@ -12,6 +11,11 @@
         <?= $comment->html ?>
     </p>
     <footer class="commentFooter">
+        <? if ($this->_user->isOwner($comment->userId)) { ?>
+            <fieldset>
+                <button class="deleteComment-Button" data-commentId="<?= $comment->id ?>">удалить</button>
+            </fieldset>
+        <? } ?>
         <p>
             Сообщение оставленно <time datetime="<?= $comment->createDate ?>"><?= $comment->formatedDate ?></time> пользователем <?= $comment->user->name ?>.
         </p>

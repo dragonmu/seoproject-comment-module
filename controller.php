@@ -23,11 +23,13 @@ class module_comment_controller {
      */
     public function __construct($module = array()) {
         $this->_moduleData = $module;
+        $this->_moduleData['user'] = (isset($module['user'])) ? new module_comment_classes_userInterface($module['user']) : new module_comment_classes_userInterface();
         //Инициализируем фабрику комментариев
         module_comment_classes_commentFactory::a($module);
         if ($this->_user->isAuth()) {
-            if (!empty($_REQUEST['modulecomment'])) {
-                $this->addNewComment($_REQUEST['modulecomment']);
+            if (!empty($_REQUEST['modulecomment' . $this->_entityId])) {
+                $this->addNewComment($_REQUEST['modulecomment' . $this->_entityId]);
+                $this->deleteComment($_REQUEST['modulecomment' . $this->_entityId]);
             }
         }
     }
@@ -39,7 +41,7 @@ class module_comment_controller {
     public function loadContent() {
         if ($this->_user->isAuth()) {
             $js = $this->templateJs('comment');
-            return $js.$this->template('autheduser');
+            return $js . $this->template('autheduser');
         }
         return $this->template('user');
     }
@@ -64,14 +66,14 @@ class module_comment_controller {
         ob_end_clean();
         return $result;
     }
-    
-    public function templateJs($file){
+
+    public function templateJs($file) {
         ob_start();
         require $this->jsDir . $file . '.min.js';
         $result = ob_get_contents();
         ob_end_clean();
-        $result = str_replace('{_ENTITY_ID_}', $this->_entityId, $result);
-        return '<script>'.$result.'</script>';
+        $result = str_replace('_ENTITY_ID_', $this->_entityId, $result);
+        return '<script>' . $result . '</script>';
     }
 
     /**
@@ -92,7 +94,12 @@ class module_comment_controller {
 
     public function addNewComment($formData) {
         $commentHtml = (isset($formData['comment']) ? $formData['comment'] : '');
+        $commentHtml = trim($commentHtml);
         $parentId = (isset($formData['parentId']) ? $formData['parentId'] : null);
+
+        if (empty($commentHtml)) {
+            return;
+        }
 
         $newComment = $this->_db->query('insert into ' . $this->_dbTable . ' (' .
                 $this->_dbTable . '_parent_id,' .
@@ -104,7 +111,23 @@ class module_comment_controller {
                 , $this->_user->id
                 , $commentHtml);
 
-        if ($newComment) {
+        if ($newComment && empty($formData['ajax'])) {
+            header("Location: $_SERVER[REQUEST_URI]");
+            die();
+        }
+    }
+
+    public function deleteComment($formData) {
+        if (empty($formData['deleteId'])) {
+            return;
+        }
+
+        $comment = module_comment_classes_commentFactory::a()->getById($formData['deleteId']);
+        if ($this->_user->isOwner($comment->userId)) {
+            module_comment_classes_commentFactory::a()->removeById($formData['deleteId']);
+        }
+
+        if ($newComment && empty($formData['ajax'])) {
             header("Location: $_SERVER[REQUEST_URI]");
             die();
         }
