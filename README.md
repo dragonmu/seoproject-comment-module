@@ -1,5 +1,5 @@
 # seoproject-comment-module
-Модуль комментариев к моему закрытому проекту.
+Модуль комментариев к моим закрытым проектам.
 
 ### Использование модуля
 
@@ -13,9 +13,10 @@ $commentModule = parts_modulefabrica::a()->createModule('comment', array(
 
 ### Требование к классам
 
-* userFactory - getById();
+* userFactory - getById($userId);
 * user - name;
 * user - isAuth();
 * user - isCurrent();
-* user - isOwner();
+* user - isOwner($userId); Сравнивает номер пользователя с переданным в функцию номером
 * db - getAll();
+* db - getRow();

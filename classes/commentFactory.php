@@ -61,7 +61,7 @@ class module_comment_classes_commentFactory {
     public function getClassList($rows) {
         $classArray = array();
         foreach ($rows as $row) {
-            $classArray[] = $this->getClass($row);
+            $classArray[$row[$this->_dbTable . '_id']] = $this->getClass($row);
         }
         return $classArray;
     }

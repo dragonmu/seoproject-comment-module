@@ -4,9 +4,18 @@ Site.addEvent('loadCommentModule', function () {
     
     var init__ENTITY_ID_ = function () {
         var addCommentForm = $(commentModule).find('.addCommentForm-Form');
+        var header = $(commentModule).find('.commentHeader');
         var submitButton = $(commentModule).find('.submitComment');
+        var cancelButton = $(commentModule).find('.cancelComment');
         var deleteButton = $(commentModule).find('.deleteComment-Button');
+        var replyButton = $(commentModule).find('.replyComment-Button');
 
+        $(cancelButton).click(function(e){
+            e.preventDefault();
+            $(addCommentForm).detach();
+            $(header).after($(addCommentForm));
+            $(addCommentForm).find('.addCommentForm-InputParent').remove();
+        });
         $(submitButton).click(function (e) {
             e.preventDefault();
             $.post('', $(addCommentForm).serialize(), function (result) {
@@ -17,6 +26,12 @@ Site.addEvent('loadCommentModule', function () {
             $.post('', {modulecomment_ENTITY_ID_: {deleteId: $(this).attr('data-commentId')}}, function (result) {
                 updateHtml__ENTITY_ID_(result);
             });
+        });
+        $(replyButton).click(function (e) {
+            $(addCommentForm).detach();
+            $(this).parents('article:first').append($(addCommentForm));
+            var commentId = $(this).attr('data-commentId');
+            $(addCommentForm).find('.addCommentForm-InputAjax').after('<input type="hidden" class="addCommentForm-InputParent" value="'+commentId+'" name="modulecomment_ENTITY_ID_[parentId]"/>');
         });
         console.log('init comments _ENTITY_ID_');
     };

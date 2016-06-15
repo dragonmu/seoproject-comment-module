@@ -28,6 +28,15 @@ class module_comment_classes_comment {
 
     public function __get($name) {
         switch ($name) {
+            case 'parentId':
+                $name = 'parent_id';
+                break;
+            case 'userId':
+                $name = 'user_id';
+                break;
+        }
+        
+        switch ($name) {
             case 'user':
                 if (!empty($this->_user)) {
                     return $this->_user;
@@ -46,8 +55,6 @@ class module_comment_classes_comment {
                 $time = strtotime($this->_commentData['modulecomment_createdate']);
                 return date('j ', $time) . $this->monthRus[date('m', $time)];
                 break;
-            case 'userId':
-                $name = 'user_id';
             default:
                 if (isset($this->_commentData['modulecomment_' . $name])) {
                     return $this->_commentData['modulecomment_' . $name];
