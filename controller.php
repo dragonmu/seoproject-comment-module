@@ -16,6 +16,8 @@ class module_comment_controller {
     protected $_contentData = null;
     protected $_name = 'Модуль комментариев';
     private $_dbTable = 'modulecomment';
+    protected $_code = 'comment';
+    protected $needAuthHtml = null;
 
     /**
      * Конструктор сайта
@@ -24,6 +26,8 @@ class module_comment_controller {
     public function __construct($module = array()) {
         $this->_moduleData = $module;
         $this->_moduleData['user'] = (isset($module['user'])) ? new module_comment_classes_userInterface($module['user']) : new module_comment_classes_userInterface();
+        $this->needAuthHtml = (isset($module['needAuthHtml'])?$module['needAuthHtml']:'authPopup();');
+        
         //Инициализируем фабрику комментариев
         module_comment_classes_commentFactory::a($module);
         if ($this->_user->isAuth()) {
@@ -140,10 +144,15 @@ class module_comment_controller {
      */
     public function __get($name) {
         switch ($name) {
+            case '_siteName':
+                $name = str_replace('_', '', $name);
+                return ((empty($this->_moduleData[$name])) ? '{_SITE_NAME_}' : $this->_moduleData[$name]);
+                break;
             case '_entityId':
             case '_userFactory':
             case '_user':
             case '_db':
+            case '_siteName':
                 $name = str_replace('_', '', $name);
                 return $this->_moduleData[$name];
                 break;

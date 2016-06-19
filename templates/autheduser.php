@@ -6,8 +6,8 @@
 /* @var $this module_comment_controller */
 ?>
 
-<section class="{_SITE_NAME_}-module-<?= $this->_code; ?>" data-moduleId="<?= $this->_entityId ?>">
-    <h1 class="commentHeader">Комментарии</h1>
+<section class="<?= $this->_siteName ?>-module-<?= $this->_code; ?>" data-moduleId="<?= $this->_entityId ?>">
+    <div class="addCommentHeader">Комментарии</div>
     <div class="addCommentForm">
         <form class="addCommentForm-Form" method="POST">
             <input type="hidden" class="addCommentForm-InputAjax" value="1" name="modulecomment<?= $this->_entityId ?>[ajax]"/>

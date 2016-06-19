@@ -4,7 +4,7 @@ Site.addEvent('loadCommentModule', function () {
     
     var init__ENTITY_ID_ = function () {
         var addCommentForm = $(commentModule).find('.addCommentForm-Form');
-        var header = $(commentModule).find('.commentHeader');
+        var header = $(commentModule).find('.addCommentHeader');
         var submitButton = $(commentModule).find('.submitComment');
         var cancelButton = $(commentModule).find('.cancelComment');
         var deleteButton = $(commentModule).find('.deleteComment-Button');

@@ -42,7 +42,7 @@ class module_comment_classes_comment {
                     return $this->_user;
                 }
                 if (!empty($this->_commentData['userFactory'])) {
-                    $this->_user = $this->_commentData['userFactory']->getById($this->_commentData['modulecomment_user_id']);
+                    $this->_user = new module_comment_classes_userInterface($this->_commentData['userFactory']->getById($this->_commentData['modulecomment_user_id']));
                 } else {
                     $this->_user = new module_comment_classes_userInterface();
                 }

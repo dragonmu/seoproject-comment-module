@@ -7,26 +7,33 @@
 /* @var $comment module_comment_classes_comment */
 ?>
 <article class="comment" data-commentId="<?= $comment->id ?>">
-    <p>
-        <?= $comment->html ?>
-    </p>
+    <header class="commentHeader">
+        <address class="commentAuthor">
+            <? if ($comment->user->hasUrl()) { ?>
+                <a rel="author" class="commentAuthorAvatar" style="background-image: url(<?= $comment->user->image ?>);" href="<?= $comment->user->url ?>"><?= $comment->user->name ?></a>
+            <? } else { ?>
+                <span class="commentAuthorAvatar"><?= $comment->user->name ?></span>
+            <? } ?>
+        </address>
+    </header>
+    <p><?=  strip_tags($comment->html) ?></p>
     <footer class="commentFooter">
-        <? if ($this->_user->isAuth()) { ?>
-            <fieldset>
-                <? if ($this->_user->isOwner($comment->userId)) { ?>
-                    <button class="deleteComment-Button" data-commentId="<?= $comment->id ?>">удалить</button>
-                <? } else { ?>
+
+        <fieldset>
+            <? if ($this->_user->isOwner($comment->userId)) { ?>
+                <button class="deleteComment-Button" data-commentId="<?= $comment->id ?>">удалить</button>
+            <? } else { ?>
+                <? if ($this->_user->isAuth()) { ?>
                     <button class="replyComment-Button" data-commentId="<?= $comment->id ?>">Ответить</button>
+                <? } else { ?>
+                    <div class="replyComment-Button" onclick="<?= $this->needAuthHtml ?>">Ответить</div>
                 <? } ?>
-            </fieldset>
-        <? } ?>
+            <? } ?>
+        </fieldset>
+
         <? if ($comment->parentId && isset($this->comments[$comment->parentId])) { ?>
-            <p class="commentReply">
-                Ответ на комментарий пользователя <?= $this->comments[$comment->parentId]->user->name ?>
-            </p>
+            <p class="commentReply">Ответ на комментарий пользователя <span class="commentReplyName"><?= $this->comments[$comment->parentId]->user->name ?></span></p>
         <? } ?>
-        <p>
-            Сообщение оставленно <time datetime="<?= $comment->createDate ?>"><?= $comment->formatedDate ?></time> пользователем <?= $comment->user->name ?>.
-        </p>
+        <p>Сообщение оставленно <time datetime="<?= $comment->createDate ?>"><?= $comment->formatedDate ?></time> пользователем <span class="commentOwnerName"><?= $comment->user->name ?></span>.</p>
     </footer>
 </article>

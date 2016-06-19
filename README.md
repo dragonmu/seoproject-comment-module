@@ -15,8 +15,11 @@ $commentModule = parts_modulefabrica::a()->createModule('comment', array(
 
 * userFactory - getById($userId);
 * user - name;
+* user - url;
+* user - image;
 * user - isAuth();
 * user - isCurrent();
 * user - isOwner($userId); Сравнивает номер пользователя с переданным в функцию номером
+* user - hasUrl();
 * db - getAll();
 * db - getRow();

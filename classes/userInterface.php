@@ -16,6 +16,12 @@ class module_comment_classes_userInterface {
 
     public function __get($name) {
         switch ($name) {
+            case 'image':
+                if ($this->contructWithUser()) {
+                    return $this->_user->image;
+                }
+                return '';
+                break;
             case 'id':
                 if ($this->contructWithUser()) {
                     return $this->_user->id;
@@ -50,6 +56,13 @@ class module_comment_classes_userInterface {
     public function isCurrent() {
         if($this->contructWithUser() && method_exists($this->_user, 'isCurrent')) {
             return $this->_user->isCurrent();
+        }
+        return false;
+    }
+    
+    public function hasUrl() {
+        if($this->contructWithUser() && method_exists($this->_user, 'hasUrl')) {
+            return $this->_user->hasUrl();
         }
         return false;
     }
