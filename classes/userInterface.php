@@ -16,21 +16,12 @@ class module_comment_classes_userInterface {
 
     public function __get($name) {
         switch ($name) {
+            case 'url':
             case 'image':
-                if ($this->contructWithUser()) {
-                    return $this->_user->image;
-                }
-                return '';
-                break;
             case 'id':
-                if ($this->contructWithUser()) {
-                    return $this->_user->id;
-                }
-                return '';
-                break;
             case 'name':
                 if ($this->contructWithUser()) {
-                    return $this->_user->name;
+                    return $this->_user->$name;
                 }
                 return 'Неизвестный пользователь';
                 break;
